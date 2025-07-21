@@ -4,7 +4,7 @@ from config import DEFAULT_PROMPT, TOPIC_PROMPT
 from db_utils import insert_curriculum
 from llm_utils import get_topic_name, get_curriculum
 
-def show():
+def show_new_curriculum():
     st.header("New Curriculum")
     topic_sentence = st.text_input("Enter a topic sentence:")
     prompt = st.text_area("Prompt for curriculum:", value=DEFAULT_PROMPT)

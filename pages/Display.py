@@ -3,7 +3,7 @@ import streamlit as st
 import pandas as pd
 from db_utils import get_all_curriculums
 
-def show():
+def show_display():
     st.header("Saved Curricula")
     data = get_all_curriculums()
     if not data:

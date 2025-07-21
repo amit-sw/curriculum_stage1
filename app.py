@@ -12,9 +12,9 @@ init_db()
 st.set_page_config(page_title="Curriculum Builder", layout="centered")
 
 page = st.navigation([
-    st.Page(Home.show, title="Home", icon="🏠"),
-    st.Page(New_Curriculum.show, title="New Curriculum", icon="📝"),
-    st.Page(Display.show, title="Display", icon="📄"),
+    st.Page(Home.show_home, title="Home", icon="🏠"),
+    st.Page(New_Curriculum.show_new_curriculum, title="New Curriculum", icon="📝"),
+    st.Page(Display.show_display, title="Display", icon="📄"),
 ])
 
 page.run()
