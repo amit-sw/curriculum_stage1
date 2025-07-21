@@ -2,20 +2,19 @@
 import streamlit as st
 from db_utils import init_db
 
+import pages.Home as Home
+import pages.New_Curriculum as New_Curriculum
+import pages.Display as Display
+
 # Initialize database
 init_db()
 
 st.set_page_config(page_title="Curriculum Builder", layout="centered")
 
-st.sidebar.title("Navigation")
-page = st.sidebar.radio("Go to", ["Home", "New Curriculum", "Display"])
+page = st.navigation([
+    st.Page(Home.show, title="Home", icon="🏠"),
+    st.Page(New_Curriculum.show, title="New Curriculum", icon="📝"),
+    st.Page(Display.show, title="Display", icon="📄"),
+])
 
-if page == "Home":
-    import pages.Home as Home
-    Home.show()
-elif page == "New Curriculum":
-    import pages.New_Curriculum as New_Curriculum
-    New_Curriculum.show()
-elif page == "Display":
-    import pages.Display as Display
-    Display.show()
+page.run()
