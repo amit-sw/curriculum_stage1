@@ -18,27 +18,40 @@ def init_db():
                 topic_sentence TEXT,
                 topic TEXT,
                 prompt TEXT,
-                response TEXT
+                response TEXT,
+                topic_expansion TEXT,
+                session_duration REAL
             )
             """
         )
         conn.execute(
             "CREATE UNIQUE INDEX IF NOT EXISTS idx_curriculum_topic ON curriculum(topic)"
         )
+        # Ensure new columns exist if upgrading an old DB
+        try:
+            conn.execute("ALTER TABLE curriculum ADD COLUMN topic_expansion TEXT")
+        except Exception:
+            pass
+        try:
+            conn.execute("ALTER TABLE curriculum ADD COLUMN session_duration REAL")
+        except Exception:
+            pass
         conn.commit()
 
-def insert_curriculum(topic_sentence, topic, prompt, response):
+def insert_curriculum(topic_sentence, topic, prompt, response, topic_expansion=None, session_duration=None):
     with sqlite3.connect(DB_FILE) as conn:
         conn.execute(
             """
-            INSERT INTO curriculum (topic_sentence, topic, prompt, response)
-            VALUES (?, ?, ?, ?)
+            INSERT INTO curriculum (topic_sentence, topic, prompt, response, topic_expansion, session_duration)
+            VALUES (?, ?, ?, ?, ?, ?)
             ON CONFLICT(topic) DO UPDATE SET
                 topic_sentence=excluded.topic_sentence,
                 prompt=excluded.prompt,
-                response=excluded.response
+                response=excluded.response,
+                topic_expansion=excluded.topic_expansion,
+                session_duration=excluded.session_duration
             """,
-            (topic_sentence, topic, prompt, response)
+            (topic_sentence, topic, prompt, response, topic_expansion, session_duration)
         )
         conn.commit()
 
@@ -63,11 +76,11 @@ def get_curriculum_by_topic(topic):
         columns = [desc[0] for desc in cur.description]
         return dict(zip(columns, row))
 
-def update_curriculum(curriculum_id, topic_sentence, topic, prompt):
+def update_curriculum(curriculum_id, topic_sentence, topic, prompt, topic_expansion=None, session_duration=None):
     with sqlite3.connect(DB_FILE) as conn:
         conn.execute(
-            "UPDATE curriculum SET topic_sentence=?, topic=?, prompt=? WHERE id=?",
-            (topic_sentence, topic, prompt, curriculum_id),
+            "UPDATE curriculum SET topic_sentence=?, topic=?, prompt=?, topic_expansion=?, session_duration=? WHERE id=?",
+            (topic_sentence, topic, prompt, topic_expansion, session_duration, curriculum_id),
         )
         conn.commit()
 

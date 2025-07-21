@@ -14,12 +14,13 @@ def get_topic_name(topic_sentence, prompt):
     )
     return response.choices[0].message.content.strip()
 
-def get_curriculum(topic, prompt):
+def get_curriculum(prompt,topic_sentence, topic_expansion, session_duration):
+    topic_input= f"Topic: {topic_sentence}\n Details: {topic_expansion or ''}\nSession Duration: {session_duration} minutes" if session_duration else topic_sentence
     response = client.chat.completions.create(
         model="gpt-4.1-mini",
         messages=[
             {"role": "system", "content": prompt},
-            {"role": "user", "content": topic},
+            {"role": "user", "content": topic_input},
         ]
     )
     return response.choices[0].message.content.strip()
