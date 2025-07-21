@@ -22,12 +22,22 @@ def init_db():
             )
             """
         )
+        conn.execute(
+            "CREATE UNIQUE INDEX IF NOT EXISTS idx_curriculum_topic ON curriculum(topic)"
+        )
         conn.commit()
 
 def insert_curriculum(topic_sentence, topic, prompt, response):
     with sqlite3.connect(DB_FILE) as conn:
         conn.execute(
-            "INSERT INTO curriculum (topic_sentence, topic, prompt, response) VALUES (?, ?, ?, ?)",
+            """
+            INSERT INTO curriculum (topic_sentence, topic, prompt, response)
+            VALUES (?, ?, ?, ?)
+            ON CONFLICT(topic) DO UPDATE SET
+                topic_sentence=excluded.topic_sentence,
+                prompt=excluded.prompt,
+                response=excluded.response
+            """,
             (topic_sentence, topic, prompt, response)
         )
         conn.commit()
