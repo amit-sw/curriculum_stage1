@@ -6,3 +6,8 @@ venv/
 .venv/
 .env
 output/
+.DS_Store
+*.sqlite3
+*.db
+*.csv
+*.json

@@ -44,4 +44,7 @@ def insert_curriculum(topic_sentence, topic, prompt, response):
 
 def get_all_curriculums():
     with sqlite3.connect(DB_FILE) as conn:
-        return conn.execute("SELECT * FROM curriculum").fetchall()
+        cur = conn.execute("SELECT * FROM curriculum")
+        columns = [desc[0] for desc in cur.description]
+        rows = cur.fetchall()
+        return columns, rows

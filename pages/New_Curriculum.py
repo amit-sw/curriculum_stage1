@@ -6,10 +6,11 @@ from llm_utils import get_topic_name, get_curriculum, get_topic_description
 
 def show_new_curriculum():
     st.header("New Curriculum")
-    topic_sentence = st.text_input("Topic Sentence (required):")
+
     topic_name = st.text_input(
         "Topic Name (optional):", value=st.session_state.get("topic_name", "")
     )
+    topic_sentence = st.text_input("Topic Sentence (required):")
     topic_description = st.text_area(
         "Topic Description (optional):",
         value=st.session_state.get("topic_description", ""),
